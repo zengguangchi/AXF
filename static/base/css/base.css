@@ -112,7 +112,7 @@ footer dl dd {
 }
 
 footer .home span {
-	background: url(/static/base/img/home.png)  no-repeat center;
+	background: url(/static/base/img/home.png) no-repeat center;
 	background-size: 1.25rem;
 }
 

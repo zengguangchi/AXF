@@ -8,7 +8,7 @@
         {% endblock %}
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'base/css/reset.css' %}">
     <link rel="stylesheet" href="{% static 'base/css/base.css' %}">
     {% block extcss %}
@@ -18,12 +18,11 @@
 <body>
 
 {% block body %}
-    {# 导航#}
     {% block header %}
         <header>爱鲜蜂</header>
     {% endblock %}
 
-    {# 主体内容#}
+
     <div class="hidescroll">
         <div id="content">
             {% block content %}
@@ -32,7 +31,6 @@
         </div>
     </div>
 
-    {# 底部#}
     {% block footer %}
         <footer>
             <a href="{% url 'axf:index' %}" class="home">
@@ -41,7 +39,7 @@
                     <div class="name">首页</div>
                 </div>
             </a>
-            <a href="{% url 'axf:market' %}" class="market">
+            <a href="{% url 'axf:markets' %}" class="market">
                 <div class="item">
                     <div class="img"><span></span></div>
                     <div class="name">闪购超市</div>
@@ -63,7 +61,8 @@
     {% endblock %}
 {% endblock %}
 
-<script src="{% static 'base/js/jquery.min.js' %}"></script>
+<script src="{% static 'base/js/jquery.js' %}"></script>
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script src="{% static 'base/js/base.js' %}"></script>
 {% block extjs %}
 {% endblock %}

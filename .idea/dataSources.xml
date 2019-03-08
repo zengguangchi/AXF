@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="python1812axf@localhost" uuid="1a2a7268-3a31-4563-97d8-84a008823ac1">
+    <data-source source="LOCAL" name="python1903axf@localhost" uuid="6c150756-afc7-4120-b031-8b963f12c4cc">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/python1812axf</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/python1903axf</jdbc-url>
       <driver-properties>
         <property name="autoReconnect" value="true" />
         <property name="zeroDateTimeBehavior" value="convertToNull" />

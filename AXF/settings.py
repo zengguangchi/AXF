@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'AXF.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':'python1812axf',
+        'NAME':'python1903axf',
         'USER':'root',
         'PASSWORD':'950128',
     }
