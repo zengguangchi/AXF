@@ -67,4 +67,20 @@ $(function () {
         categoryViewHide()
         categoryShow = false
     })
+
+    $('.glyphicon-plus').click(function () {
+        var goodsid=$(this).attr('goodsid')
+        data={
+            'goodsid':goodsid,
+            'num':'1'
+        }
+        $.get('/axf/addcart/',data,function (response) {
+            if(response.status==0){
+                window.open('/axf/login/',target='_self')
+            }
+            else if (response.status==1){
+                alert(response.msg)
+            }
+        })
+    })
 })

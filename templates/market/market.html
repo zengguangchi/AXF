@@ -15,7 +15,7 @@
 {% block content %}
     <div class="market">
 
-        <div class="type-slider">
+        <div class="type-slider" >
             <ul>
                 {% for foodtype in foodtypes %}
                     <li>
@@ -74,7 +74,7 @@
                             <div class="bt-wrapper">
                                 <span class="glyphicon glyphicon-minus"></span>
                                 <i>10</i>
-                                <span class="glyphicon glyphicon-plus"></span>
+                                <span class="glyphicon glyphicon-plus " goodsid="{{ goods.id }}"></span>
                             </div>
                         </li>
                     {% endfor %}
