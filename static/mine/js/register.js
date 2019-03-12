@@ -1,3 +1,11 @@
 $(function () {
     $('.register').width(innerWidth)
+
+
+
+
+
+
+
+
 })

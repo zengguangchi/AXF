@@ -39,13 +39,18 @@
         </ul>
         <div class="bill">
             <div class="bill-left">
-                <div class="all" isall="false">
-                    <span class="no"></span>
+                <div class="all" isall= "{{ isall }}"}>
+                    {% if isall %}
+                         <span class="glyphicon glyphicon-ok"></span>
+                    {% else %}
+                         <span class="no"></span>
+                    {% endif %}
+
                     <b>全选</b>
                 </div>
                 <div class="total">
                     <span>￥</span>
-                    <b>200</b>
+                    <b></b>
                 </div>
             </div>
             <div class="bill-right" id="generateorder">

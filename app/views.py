@@ -88,6 +88,13 @@ def market(request, childid='0', sortid='0'):
         'childid': childid
     }
 
+    token = request.session.get('token')
+    userid = cache.get(token)
+
+    if userid:
+        user = User.objects.get(pk=userid)
+        carts = user.cart_set.all()
+        response_dir['carts'] = carts
     return render(request, 'market/market.html', context=response_dir)
 
 
@@ -95,14 +102,26 @@ def cart(request):
     token = request.session.get('token')
     user = None
     if token:
-        userid=cache.get(token)
-        user=User.objects.get(pk=userid)
+        userid = cache.get(token)
+        # if userid:
+        user = User.objects.get(pk=userid)
         carts = Cart.objects.filter(user=user).exclude(number=0)
+        isall = True
+        for cart in carts:
+            if not cart.isselect:
+                isall = False
         data = {
             'user': user,
-            'carts': carts
+            'carts': carts,
+            'isall': isall
         }
-    return render(request, 'cart/cart.html',data)
+
+
+
+
+    else:
+        data = {}
+    return render(request, 'cart/cart.html', data)
 
 
 def mine(request):
@@ -158,25 +177,80 @@ def logout(request):
 
 def addcart(request):
     token = request.session.get('token')
-    num = request.GET.get('num')
+
     if token:
-        userid=cache.get(token)
+        userid = cache.get(token)
         user = User.objects.get(pk=userid)
         goodsid = request.GET.get('goodsid')
         goods = Goods.objects.get(pk=goodsid)
         carts = Cart.objects.filter(user=user).filter(goods=goods)
         if carts.exists():
             cart = carts.first()
-            cart.number = cart.number + int(num)
+            cart.number = cart.number + 1
             cart.save()
 
         else:
             cart = Cart()
             cart.user = user
             cart.goods = goods
-            cart.number = num
+            cart.number = 1
             cart.save()
         return JsonResponse({'msg': '添加成功', 'status': 1, 'number': cart.number})
 
     else:
         return JsonResponse({'msg': '请登录', 'status': 0})
+
+
+def sucart(request):
+    token = request.session.get('token')
+    userid = cache.get(token)
+    user = User.objects.get(pk=userid)
+    goodsid = request.GET.get('goodsid')
+    goods = Goods.objects.get(pk=goodsid)
+    cart = Cart.objects.filter(user=user).filter(goods=goods).first()
+    cart.number = cart.number - 1
+    cart.save()
+    data = {
+        'msg': '删减商品成功',
+        'status': 1,
+        'number': cart.number
+    }
+    return JsonResponse(data)
+
+
+
+
+def changecartselect(request):
+    cartid=request.GET.get('cartid')
+    cart=Cart.objects.get(pk=cartid)
+    cart.isselect=not cart.isselect
+    cart.save()
+    data={
+        'msg':'修改状态成功',
+        'status':1,
+        'isselect':cart.isselect
+    }
+    return JsonResponse(data)
+
+
+
+
+def changecartall(request):
+    isall=request.GET.get('isall')
+    token=request.session.get('token')
+    userid=cache.get(token)
+    user=User.objects.get(pk=userid)
+    carts=user.cart_set.all()
+    if isall=="true":
+        isall=False
+    else:
+        isall=True
+
+    for cart in carts:
+        cart.isselect=isall
+        cart.save()
+    data={
+        'msg':'全选状态修改',
+        'status':1
+    }
+    return JsonResponse(data)

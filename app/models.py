@@ -112,15 +112,10 @@ class Goods(models.Model):
         db_table = 'axf_goods'
 
 class User(models.Model):
-    # 邮箱
     email = models.CharField(max_length=40, unique=True)
-    # 密码
     password = models.CharField(max_length=256)
-    # 昵称
     name = models.CharField(max_length=100)
-    # 头像
     img = models.CharField(max_length=40, default='axf.png')
-    # 等级
     rank = models.IntegerField(default=1)
 
     class Meta:
@@ -135,3 +130,24 @@ class Cart(models.Model):
 
     class Meta:
         db_table = 'axf_cart'
+
+
+
+class Order(models.Model):
+
+    user = models.ForeignKey(User)
+    createtime = models.DateTimeField(auto_now_add=True)
+    updatetime = models.DateTimeField(auto_now=True)
+
+    status = models.IntegerField(default=0)
+
+    identifier = models.CharField(max_length=256)
+
+
+
+
+class OrderGoods(models.Model):
+    order = models.ForeignKey(Order)
+    goods = models.ForeignKey(Goods)
+    number = models.IntegerField()
+
