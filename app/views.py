@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from app.models import Wheel, Nav, Mustbuy, Shop, Mainshow, Foodtype, Goods, User, Cart
+from app.models import Wheel, Nav, Mustbuy, Shop, Mainshow, Foodtype, Goods, User, Cart, Order, OrderGoods
 
 
 def generate_password(param):
@@ -103,25 +103,25 @@ def cart(request):
     user = None
     if token:
         userid = cache.get(token)
-        # if userid:
-        user = User.objects.get(pk=userid)
-        carts = Cart.objects.filter(user=user).exclude(number=0)
-        isall = True
-        for cart in carts:
-            if not cart.isselect:
-                isall = False
-        data = {
-            'user': user,
-            'carts': carts,
-            'isall': isall
-        }
+        if userid:
+            user = User.objects.get(pk=userid)
+            carts = Cart.objects.filter(user=user).exclude(number=0)
+            isall = True
+            for cart in carts:
+                if not cart.isselect:
+                    isall = False
+            data = {
+                'user': user,
+                'carts': carts,
+                'isall': isall
+            }
 
 
 
 
-    else:
-        data = {}
-    return render(request, 'cart/cart.html', data)
+        else:
+            data = {}
+        return render(request, 'cart/cart.html', data)
 
 
 def mine(request):
@@ -218,39 +218,73 @@ def sucart(request):
     return JsonResponse(data)
 
 
-
-
 def changecartselect(request):
-    cartid=request.GET.get('cartid')
-    cart=Cart.objects.get(pk=cartid)
-    cart.isselect=not cart.isselect
+    cartid = request.GET.get('cartid')
+    cart = Cart.objects.get(pk=cartid)
+    cart.isselect = not cart.isselect
     cart.save()
-    data={
-        'msg':'修改状态成功',
-        'status':1,
-        'isselect':cart.isselect
+    data = {
+        'msg': '修改状态成功',
+        'status': 1,
+        'isselect': cart.isselect
     }
     return JsonResponse(data)
-
-
 
 
 def changecartall(request):
-    isall=request.GET.get('isall')
-    token=request.session.get('token')
-    userid=cache.get(token)
-    user=User.objects.get(pk=userid)
-    carts=user.cart_set.all()
-    if isall=="true":
-        isall=False
+    isall = request.GET.get('isall')
+    token = request.session.get('token')
+    userid = cache.get(token)
+    user = User.objects.get(pk=userid)
+    carts = user.cart_set.all()
+    if isall == "true":
+        isall = False
     else:
-        isall=True
+        isall = True
 
     for cart in carts:
-        cart.isselect=isall
+        cart.isselect = isall
         cart.save()
-    data={
-        'msg':'全选状态修改',
-        'status':1
+    data = {
+        'msg': '全选状态修改',
+        'status': 1
     }
     return JsonResponse(data)
+
+
+def generate_identifier():
+    temp = str(time.time()) + str(random.randrange(1000, 10000))
+    return temp
+
+
+def generateorder(request):
+    token = request.session.get('token')
+    userid = cache.get(token)
+    user = User.objects.get(pk=userid)
+    order = Order()
+    order.user = user
+    order.identifier = generate_identifier()
+    order.save()
+    carts = user.cart_set.filter(isselect=True)
+    for cart in carts:
+        ordergoods = OrderGoods()
+        ordergoods.order = order
+        ordergoods.goods = cart.goods
+        ordergoods.number = cart.number
+        ordergoods.save()
+        cart.delete()
+    return render(request, 'order/orderdetail.html', context={'order': order})
+
+
+def orderlist(request):
+    token = request.session.get('token')
+    userid = cache.get(token)
+    user = User.objects.get(pk=userid)
+    orders = user.order_set.all()
+    return render(request, 'order/orderlist.html', context={'orders': orders})
+
+
+def orderdetail(request, identifier):
+    order = Order.objects.filter(identifier=identifier).first()
+
+    return render(request, 'order/orderdetail.html', context={'order': order})

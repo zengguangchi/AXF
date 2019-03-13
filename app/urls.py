@@ -16,4 +16,7 @@ urlpatterns = [
     url(r'^sucart/$',views.sucart,name='sucart'),
     url(r'^changecartselect/$',views.changecartselect,name='changecartselect'),
     url(r'^changecartall/$',views.changecartall,name='changecartall'),
+    url(r'^orderlist/$',views.orderlist,name='orderlist'),
+    url(r'^generateorder/$',views.generateorder,name='generateorder'),
+    url(r'^orderdetail/([\d.]+)/$', views.orderdetail, name='orderdetail'),
 ]

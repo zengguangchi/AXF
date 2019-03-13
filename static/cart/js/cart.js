@@ -79,7 +79,7 @@ $(function () {
             }
         })
 
-        $('.total b').html(sum)
+        // $('.total b').html(sum)
     }
 
 

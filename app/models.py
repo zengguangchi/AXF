@@ -138,9 +138,7 @@ class Order(models.Model):
     user = models.ForeignKey(User)
     createtime = models.DateTimeField(auto_now_add=True)
     updatetime = models.DateTimeField(auto_now=True)
-
     status = models.IntegerField(default=0)
-
     identifier = models.CharField(max_length=256)
 
 
